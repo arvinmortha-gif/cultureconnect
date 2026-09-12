@@ -14,7 +14,7 @@
     header { height:68px; display:flex; align-items:center; background:#fff; color:var(--ink); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
     .nav { display:flex; align-items:center; justify-content:space-between; gap:16px; width:100%; }
     .brand { display:flex; align-items:center; gap:8px; font-family:Arial, sans-serif; font-size:1.18rem; font-weight:950; letter-spacing:-.075em; text-transform:uppercase; }
-    .logo { width:22px; height:22px; display:grid; place-items:center; background:var(--ink); color:var(--brand); border-radius:50%; font-size:.7rem; }
+    .logo { width:34px; height:34px; display:block; object-fit:contain; }
     .language { width:auto; min-height:32px; border:0; border-left:1px solid var(--line); background:#fff; border-radius:0; padding:0 8px; color:var(--ink); font-size:.74rem; font-weight:800; text-transform:uppercase; }
     .hero { margin-top:22px; padding:0; min-height:422px; display:grid; grid-template-columns:minmax(0,1.2fr) minmax(310px,.8fr); align-items:stretch; gap:0; border:0; background:var(--accent); }
     .hero > section { padding:56px 54px 48px; display:flex; flex-direction:column; justify-content:end; }
@@ -47,7 +47,7 @@
 </head>
 <body>
   <div class="announcement">Community connections, made simple · Explore what is near you</div>
-  <header><div class="wrap nav"><div class="brand"><span class="logo">✦</span> CultureConnect</div><select class="language" id="language" aria-label="Choose display language"><option value="en">English</option><option value="es">Español</option><option value="vi">Tiếng Việt</option><option value="tl">Tagalog</option></select></div></header>
+  <header><div class="wrap nav"><div class="brand"><img class="logo" src="cultureconnect-logo.png" alt="CultureConnect globe and community logo" /> CultureConnect</div><select class="language" id="language" aria-label="Choose display language"><option value="en">English</option><option value="es">Español</option><option value="vi">Tiếng Việt</option><option value="tl">Tagalog</option></select></div></header>
   <div class="wrap hero">
     <section><span class="eyebrow" id="eyebrow">A warm welcome, wherever you land</span><h1 id="headline">Find a piece of home near you.</h1><p class="lead" id="intro">Tell us where you're from and where you live now. We’ll help you find food, events, and people who understand.</p></section>
     <aside class="hero-art" aria-hidden="true"><div class="art-card"><span>✦</span><strong>Start<br>local.</strong><small>Food · events · people</small></div></aside>
