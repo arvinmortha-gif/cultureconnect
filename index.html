@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CultureConnect — Find your community</title>
+  <style>
+    :root { --ink:#21332e; --muted:#62716c; --cream:#fffaf2; --peach:#ffe3c2; --coral:#e9664b; --teal:#147a70; --mint:#e4f3ed; --line:#d9e4dd; --card:#fff; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--cream); color:var(--ink); font:16px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, select, input { font:inherit; }
+    .wrap { width:min(1120px, calc(100% - 32px)); margin:auto; }
+    header { padding:22px 0; background:rgba(255,250,242,.93); border-bottom:1px solid #f0e4d6; position:sticky; top:0; z-index:5; backdrop-filter:blur(10px); }
+    .nav { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { display:flex; align-items:center; gap:10px; font-size:1.28rem; font-weight:800; letter-spacing:-.03em; }
+    .logo { width:37px; height:37px; display:grid; place-items:center; background:var(--coral); color:#fff; border-radius:13px; }
+    .language { border:1px solid var(--line); background:#fff; border-radius:10px; padding:8px 10px; color:var(--ink); }
+    .hero { padding:56px 0 32px; display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:44px; }
+    .eyebrow { display:inline-block; padding:6px 10px; border-radius:99px; background:var(--peach); color:#854329; font-size:.86rem; font-weight:700; }
+    h1 { font-size:clamp(2.3rem, 5vw, 4.3rem); letter-spacing:-.06em; line-height:.98; margin:14px 0 18px; max-width:690px; }
+    .lead { max-width:610px; font-size:1.15rem; color:var(--muted); }
+    .hero-art { min-height:240px; border-radius:28px; background:linear-gradient(135deg, #f9b880, #f98c73 52%, #e9664b); padding:24px; display:flex; align-items:end; position:relative; overflow:hidden; box-shadow:0 15px 30px rgba(139,74,48,.14); }
+    .hero-art:before { content:""; position:absolute; width:230px; height:230px; border:22px solid rgba(255,255,255,.26); border-radius:50%; top:-92px; right:-56px; }
+    .art-card { position:relative; background:rgba(255,255,255,.92); border-radius:17px; padding:16px; width:210px; box-shadow:0 12px 24px rgba(90,41,30,.15); transform:rotate(-3deg); }
+    .art-card strong { display:block; margin:3px 0; font-size:1.07rem; }
+    .search-panel { background:#fff; border:1px solid #f1e5d7; border-radius:24px; padding:24px; box-shadow:0 12px 30px rgba(63,49,32,.07); }
+    .search-panel h2 { margin:0 0 4px; font-size:1.38rem; letter-spacing:-.03em; }
+    .search-panel p { color:var(--muted); margin:0 0 20px; }
+    .form-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:15px; }
+    label { display:block; font-size:.92rem; font-weight:750; margin-bottom:7px; }
+    select, input { width:100%; min-height:50px; border:1px solid #bccbc3; background:#fff; border-radius:12px; padding:0 13px; color:var(--ink); }
+    select:focus, input:focus, button:focus-visible { outline:3px solid #82c9c0; outline-offset:2px; }
+    .categories { grid-column:1/-1; display:flex; flex-wrap:wrap; gap:9px; }
+    .category { cursor:pointer; border:1px solid #c8d7cf; border-radius:12px; background:#fff; padding:11px 14px; font-weight:700; color:var(--ink); }
+    .category.active { background:var(--teal); color:#fff; border-color:var(--teal); }
+    .help { grid-column:1/-1; color:var(--muted); font-size:.88rem; background:var(--mint); padding:11px 13px; border-radius:10px; }
+    .kids-filter { grid-column:1/-1; display:none; background:#fff4e9; border:1px solid #f2d6bd; border-radius:14px; padding:15px; }
+    .kids-filter.show { display:block; }
+    .kids-filter h3 { margin:0 0 4px; font-size:1rem; }
+    .kids-filter p { margin:0 0 12px; color:var(--muted); font-size:.9rem; }
+    .kid-options { display:flex; flex-wrap:wrap; gap:8px; }
+    .kid-option { border:1px solid #dfc4a8; background:#fff; color:var(--ink); border-radius:99px; padding:8px 11px; cursor:pointer; font-weight:700; font-size:.9rem; }
+    .kid-option.active { background:#a85035; color:#fff; border-color:#a85035; }
+    .kid-note { margin-top:12px; color:#75412b; font-size:.85rem; font-weight:650; }
+    main { padding:33px 0 70px; }
+    .results-head { display:flex; justify-content:space-between; align-items:end; gap:15px; margin-bottom:18px; }
+    .results-head h2 { margin:0; letter-spacing:-.04em; font-size:1.7rem; }
+    .count { color:var(--muted); margin:0; }
+    .saved-pill { border:0; background:var(--peach); color:#78401d; padding:9px 12px; border-radius:99px; font-weight:750; cursor:pointer; }
+    .grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px; }
+    .card { background:var(--card); border:1px solid #e2e9e4; border-radius:18px; padding:18px; min-height:211px; display:flex; flex-direction:column; box-shadow:0 4px 11px rgba(39,62,49,.035); }
+    .card-top { display:flex; align-items:start; justify-content:space-between; gap:12px; }
+    .icon { font-size:1.72rem; width:46px; height:46px; display:grid; place-items:center; background:var(--mint); border-radius:13px; }
+    .save { border:0; background:transparent; cursor:pointer; font-size:1.37rem; color:#8ca099; padding:3px; }
+    .save.on { color:var(--coral); }
+    .type { margin:14px 0 3px; font-size:.78rem; color:var(--teal); font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
+    .card h3 { margin:0; letter-spacing:-.025em; font-size:1.15rem; }
+    .desc { margin:6px 0 12px; color:var(--muted); }
+    .bottom { display:flex; justify-content:space-between; gap:8px; align-items:center; margin-top:auto; font-size:.9rem; }
+    .place { color:var(--muted); }
+    .details { color:var(--teal); font-weight:800; text-decoration:none; }
+    .empty { grid-column:1/-1; text-align:center; background:#fff; border:1px dashed #b8cdc2; border-radius:18px; padding:43px 22px; }
+    .empty .empty-icon { font-size:2.6rem; }
+    .empty h3 { margin:8px 0 4px; }
+    .empty p { max-width:440px; margin:0 auto; color:var(--muted); }
+    .tip { margin-top:25px; padding:17px 19px; border-radius:15px; background:#f3eee6; color:#52615c; }
+    .tip strong { color:var(--ink); }
+    @media (max-width:760px) { .hero { grid-template-columns:1fr; padding-top:34px; gap:25px; } .hero-art { min-height:170px; } .grid { grid-template-columns:1fr; } .form-grid { grid-template-columns:1fr; } h1 { font-size:2.75rem; } .results-head { align-items:start; flex-wrap:wrap; } }
+  </style>
+</head>
+<body>
+  <header><div class="wrap nav"><div class="brand"><span class="logo">✦</span> CultureConnect</div><select class="language" id="language" aria-label="Choose display language"><option value="en">English</option><option value="es">Español</option><option value="vi">Tiếng Việt</option><option value="tl">Tagalog</option></select></div></header>
+  <div class="wrap hero">
+    <section><span class="eyebrow" id="eyebrow">A warm welcome, wherever you land</span><h1 id="headline">Find a piece of home near you.</h1><p class="lead" id="intro">Tell us where you're from and where you live now. We’ll help you find food, events, and people who understand.</p></section>
+    <aside class="hero-art" aria-hidden="true"><div class="art-card"><span>👋</span><strong>You're not alone here.</strong><small>Start with one small connection.</small></div></aside>
+  </div>
+  <div class="wrap search-panel"><h2 id="finderTitle">Let’s find your community</h2><p id="finderText">Choose what feels most helpful today. You can pick more than one.</p><div class="form-grid">
+    <div><label for="culture" id="cultureLabel">Your culture or background</label><select id="culture"></select></div>
+    <div><label for="city" id="cityLabel">Your city now</label><input id="city" list="cities" placeholder="Type or choose a city" /><datalist id="cities"><option>San Antonio</option><option>Houston</option><option>Austin</option><option>Dallas</option></datalist></div>
+    <div class="categories" id="categories" aria-label="What would you like to explore?"></div>
+    <section class="kids-filter" id="kidsFilter" aria-label="Parent-managed kids filters">
+      <h3>For parents only — add an anonymous kid interest tag</h3><p>Choose an age range and interests. No child name, profile, or account is created.</p>
+      <div class="kid-options" id="ageOptions" aria-label="Child age range"></div><div class="kid-options" id="interestOptions" aria-label="Child interests" style="margin-top:9px"></div>
+      <div class="kid-note">🛡️ Parent-to-parent connections only. Parents arrange any supervised meetup themselves.</div>
+    </section>
+    <div class="help" id="helper"><strong>What is a community meetup?</strong> It’s a casual gathering where people talk, share food, or do an activity together.</div>
+  </div></div>
+  <main class="wrap"><div class="results-head"><div><h2 id="resultsTitle">Ideas for you</h2><p class="count" id="count"></p></div><button class="saved-pill" id="savedButton">♡ Saved: 0</button></div><div class="grid" id="results" aria-live="polite"></div><div class="tip" id="tip"><strong>Good to know:</strong> A cultural center is a friendly place that shares classes, celebrations, and support for a community.</div></main>
+  <script>
+    const cultures = ['Indian','Mexican','Filipino','Nigerian','Vietnamese','Korean','Chinese','Ethiopian','Arab','Ukrainian'];
+    const categoryInfo = { restaurants:['🍛','Restaurants'], events:['🎉','Cultural Events'], groups:['👥','Community Groups'], kids:['🧒','For My Kids'], resources:['🧭','Helpful Resources'] };
+    const items = [
+      ['Indian','San Antonio','restaurants','🍛','Spice Route Kitchen','Authentic Indian food with vegetarian choices.','📍 North Side','View details →'], ['Indian','San Antonio','restaurants','🥘','Saffron Table','A relaxed place for biryani and chai.','📍 Downtown','View details →'], ['Indian','San Antonio','events','🪔','Diwali Lights Night','Music, snacks, and lights for the whole family.','📍 Cultural Center','See event →'], ['Indian','San Antonio','events','🎨','Bollywood Dance Social','A beginner-friendly dance evening. No partner needed.','📍 Alamo Heights','See event →'], ['Indian','San Antonio','groups','🤝','San Antonio Indian Families','Friendly monthly meetup for new and longtime residents.','📍 Nearby','Learn more →'], ['Indian','San Antonio','groups','🧑‍🤝‍🧑','Desi Newcomers Circle','Meet people, ask questions, and share local tips.','📍 Northwest','Learn more →'],
+      ['Mexican','Houston','restaurants','🌮','Casa del Maíz','Comforting Mexican dishes and warm tortillas.','📍 East End','View details →'], ['Mexican','Houston','restaurants','🍲','La Cocina de Abuela','Home-style meals in a welcoming space.','📍 Midtown','View details →'], ['Mexican','Houston','events','🎺','Mariachi in the Park','Free outdoor music and family activities.','📍 Discovery Green','See event →'], ['Mexican','Houston','events','💐','Día de los Muertos Workshop','Make an ofrenda and learn about the tradition.','📍 Museum District','See event →'], ['Mexican','Houston','groups','🤝','Houston Mexican Community Network','A place to meet neighbors and find local support.','📍 Downtown','Learn more →'], ['Mexican','Houston','groups','⚽','Familias Unidas Weekend Club','Picnics, soccer, and new-friend meetups.','📍 Westside','Learn more →'],
+      ['Filipino','Austin','restaurants','🍜','Lola’s Filipino Kitchen','Classic Filipino comfort food, made with care.','📍 South Austin','View details →'], ['Filipino','Austin','restaurants','🥭','Isla Café','Coffee, pastries, and Filipino breakfast favorites.','📍 East Austin','View details →'], ['Filipino','Austin','events','🎤','Filipino Open Mic Night','Songs, stories, and snacks in a relaxed space.','📍 Downtown','See event →'], ['Filipino','Austin','events','🌴','Pista sa Park','A family celebration with food and cultural dance.','📍 Zilker Area','See event →'], ['Filipino','Austin','groups','👋','Austin Filipino Welcome Circle','Meet others who are also building a life here.','📍 Central Austin','Learn more →'], ['Filipino','Austin','groups','🧺','Kapwa Community Potluck','Bring a dish if you can—or just bring yourself.','📍 North Loop','Learn more →'],
+      ['Indian','Dallas','resources','🛒','Indian Grocery Guide','A simple list of nearby places for familiar groceries.','📍 Dallas Area','Learn more →'], ['Mexican','San Antonio','resources','📄','Newcomer Paperwork Help','Free, plain-language help finding local services.','📍 Downtown','Learn more →'], ['Filipino','Houston','resources','🚗','Driver’s License Steps','A clear guide to preparing for a Texas driver’s license.','📍 Online & Nearby','Learn more →'],
+      ['Indian','San Antonio','kids','🏫','Heritage Night at Willow School','A school evening with food, stories, and family activities.','📍 North Side','See event →',['5-7','8-10'],['art','reading']], ['Indian','San Antonio','kids','⚽','Little Lions Soccer Circle','A welcoming weekend soccer group for young players.','📍 Northwest','Learn more →',['5-7','8-10'],['soccer']], ['Indian','San Antonio','kids','👨‍👩‍👧','Desi Family Playgroup','Parents meet while children play nearby in a shared space.','📍 Alamo Heights','Learn more →',['5-7'],['art','dance']],
+      ['Mexican','Houston','kids','🎨','Cultura Kids Art Club','Make crafts and learn cultural stories with a parent nearby.','📍 East End','See event →',['5-7','8-10'],['art','reading']], ['Mexican','Houston','kids','⚽','Familias Soccer League','A family-friendly league with a beginner group.','📍 Westside','Learn more →',['8-10','11-13'],['soccer']], ['Mexican','Houston','kids','👨‍👩‍👧','Parents & Pals Meetup','Parent-to-parent playgroup for families new to Houston.','📍 Midtown','Learn more →',['5-7','8-10'],['art','dance']],
+      ['Filipino','Austin','kids','📚','Stories from Home','A bilingual story hour and craft activity for families.','📍 East Austin','See event →',['5-7','8-10'],['reading','art']], ['Filipino','Austin','kids','💃','Junior Dance Workshop','A beginner cultural dance class with parent viewing.','📍 South Austin','Learn more →',['8-10','11-13'],['dance']], ['Filipino','Austin','kids','👨‍👩‍👧','Kapwa Parent Circle','Parents connect over shared local tips while kids enjoy games.','📍 Central Austin','Learn more →',['5-7','8-10'],['soccer','art']]
+    ].map(([culture,city,category,icon,title,description,place,cta,ages=[],interests=[]], i) => ({id:i+1,culture,city,category,icon,title,description,place,cta,ages,interests}));
+    const copy = { en:{eyebrow:'A warm welcome, wherever you land',headline:'Find a piece of home near you.',intro:"Tell us where you're from and where you live now. We’ll help you find food, events, and people who understand.",finderTitle:'Let’s find your community',finderText:'Choose what feels most helpful today. You can pick more than one.',culture:'Your culture or background',city:'Your city now',placeholder:'Type or choose a city',ideas:'Ideas for you',help:'What is a community meetup?',helptext:'It’s a casual gathering where people talk, share food, or do an activity together.',tip:'Good to know:',tiptext:'A cultural center is a friendly place that shares classes, celebrations, and support for a community.',empty:'No results yet for this combination',emptyText:'Try another city, culture, or category. We are adding more places all the time.',saved:'Saved'}, es:{eyebrow:'Una bienvenida cálida, estés donde estés',headline:'Encuentra un pedacito de hogar cerca de ti.',intro:'Dinos de dónde vienes y dónde vives ahora. Te ayudaremos a encontrar comida, eventos y personas que te entienden.',finderTitle:'Encontremos tu comunidad',finderText:'Elige lo que más te ayude hoy. Puedes elegir más de una opción.',culture:'Tu cultura o comunidad',city:'Tu ciudad actual',placeholder:'Escribe o elige una ciudad',ideas:'Ideas para ti',help:'¿Qué es una reunión comunitaria?',helptext:'Es un encuentro informal para hablar, compartir comida o hacer una actividad juntos.',tip:'Bueno saber:',tiptext:'Un centro cultural es un lugar amigable con clases, celebraciones y apoyo comunitario.',empty:'Aún no hay resultados para esta combinación',emptyText:'Prueba otra ciudad, cultura o categoría.',saved:'Guardados'}, vi:{eyebrow:'Chào mừng bạn đến nơi ở mới',headline:'Tìm một phần quê hương ở gần bạn.',intro:'Hãy cho chúng tôi biết bạn đến từ đâu và đang sống ở đâu. Chúng tôi sẽ giúp bạn tìm đồ ăn, sự kiện và bạn bè.',finderTitle:'Hãy tìm cộng đồng của bạn',finderText:'Chọn điều hữu ích cho bạn hôm nay. Bạn có thể chọn nhiều mục.',culture:'Văn hóa hoặc nguồn gốc',city:'Thành phố hiện tại',placeholder:'Nhập hoặc chọn thành phố',ideas:'Gợi ý cho bạn',help:'Buổi gặp cộng đồng là gì?',helptext:'Đó là buổi gặp gỡ thân mật để trò chuyện, ăn uống hoặc cùng hoạt động.',tip:'Thông tin hữu ích:',tiptext:'Trung tâm văn hóa là nơi thân thiện có lớp học, lễ hội và hỗ trợ cộng đồng.',empty:'Chưa có kết quả cho lựa chọn này',emptyText:'Hãy thử thành phố, văn hóa hoặc danh mục khác.',saved:'Đã lưu'}, tl:{eyebrow:'Mainit na pagtanggap saan ka man naroroon',headline:'Maghanap ng munting bahagi ng tahanan malapit sa iyo.',intro:'Sabihin kung saan ka nagmula at saan ka nakatira ngayon. Tutulungan ka naming makahanap ng pagkain, mga kaganapan, at mga taong makakaunawa.',finderTitle:'Hanapin natin ang iyong komunidad',finderText:'Piliin ang pinaka-makakatulong sa iyo ngayon. Maaari kang pumili ng higit sa isa.',culture:'Iyong kultura o pinagmulan',city:'Iyong lungsod ngayon',placeholder:'Mag-type o pumili ng lungsod',ideas:'Mga ideya para sa iyo',help:'Ano ang community meetup?',helptext:'Ito ay kaswal na pagtitipon para mag-usap, magsalo ng pagkain, o gumawa ng aktibidad.',tip:'Mabuting malaman:',tiptext:'Ang cultural center ay magiliw na lugar para sa klase, pagdiriwang, at suporta.',empty:'Wala pang resulta para sa napili',emptyText:'Subukan ang ibang lungsod, kultura, o kategorya.',saved:'Naka-save'} };
+    let selected = new Set(['restaurants','events','groups']), saved = new Set(), showSaved = false, kidAge = '5-7', kidInterests = new Set();
+    const $ = id => document.getElementById(id); const cultureEl=$('culture'), cityEl=$('city'), results=$('results');
+    cultures.forEach(x => cultureEl.add(new Option(x,x))); cultureEl.value='Indian'; cityEl.value='San Antonio';
+    function renderCats(){ $('categories').innerHTML=Object.entries(categoryInfo).map(([key,[icon,name]])=>`<button type="button" class="category ${selected.has(key)?'active':''}" data-cat="${key}" aria-pressed="${selected.has(key)}">${icon} ${name}</button>`).join(''); document.querySelectorAll('.category').forEach(b=>b.onclick=()=>{selected.has(b.dataset.cat)?selected.delete(b.dataset.cat):selected.add(b.dataset.cat); $('kidsFilter').classList.toggle('show',selected.has('kids')); renderCats(); render();}); }
+    function renderKidFilters(){ const ages=['5-7','8-10','11-13'], interests=['soccer','art','reading','dance']; $('ageOptions').innerHTML=ages.map(x=>`<button type="button" class="kid-option ${kidAge===x?'active':''}" data-age="${x}">Ages ${x}</button>`).join(''); $('interestOptions').innerHTML=interests.map(x=>`<button type="button" class="kid-option ${kidInterests.has(x)?'active':''}" data-interest="${x}">${x[0].toUpperCase()+x.slice(1)}</button>`).join(''); document.querySelectorAll('[data-age]').forEach(b=>b.onclick=()=>{kidAge=b.dataset.age;renderKidFilters();render();}); document.querySelectorAll('[data-interest]').forEach(b=>b.onclick=()=>{kidInterests.has(b.dataset.interest)?kidInterests.delete(b.dataset.interest):kidInterests.add(b.dataset.interest);renderKidFilters();render();}); }
+    function render(){ const culture=cultureEl.value, city=cityEl.value.trim(); let found=items.filter(x=>x.culture===culture && x.city.toLowerCase()===city.toLowerCase() && selected.has(x.category) && (x.category!=='kids' || (x.ages.includes(kidAge) && (!kidInterests.size || x.interests.some(i=>kidInterests.has(i)))))); if(showSaved) found=found.filter(x=>saved.has(x.id)); const c=copy[$('language').value]; $('count').textContent=found.length ? `${found.length} ${found.length===1?'place':'places'} ${showSaved?'saved':'to explore'} in ${city || 'your area'}` : ''; if(!found.length){results.innerHTML=`<section class="empty"><div class="empty-icon">🌱</div><h3>${c.empty}</h3><p>${c.emptyText}</p></section>`; return;} results.innerHTML=found.map(x=>`<article class="card"><div class="card-top"><span class="icon">${x.icon}</span><button class="save ${saved.has(x.id)?'on':''}" data-save="${x.id}" aria-label="Save ${x.title}">${saved.has(x.id)?'♥':'♡'}</button></div><p class="type">${categoryInfo[x.category][1]}</p><h3>${x.title}</h3><p class="desc">${x.description}</p>${x.category==='kids'?`<p class="kid-note">Ages ${x.ages.join(' & ')} · ${x.interests.map(i=>'#'+i).join(' ')}<br>Parent supervision recommended.</p>`:''}<div class="bottom"><span class="place">${x.place}</span><a class="details" href="#" onclick="return false">${x.cta}</a></div></article>`).join(''); document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{const id=+b.dataset.save; saved.has(id)?saved.delete(id):saved.add(id); updateSaved(); render();}); }
+    function updateSaved(){ $('savedButton').textContent=`${showSaved?'← ': '♡ '}${copy[$('language').value].saved}: ${saved.size}`; }
+    function translate(){const c=copy[$('language').value]; $('eyebrow').textContent=c.eyebrow; $('headline').textContent=c.headline; $('intro').textContent=c.intro; $('finderTitle').textContent=c.finderTitle; $('finderText').textContent=c.finderText; $('cultureLabel').textContent=c.culture; $('cityLabel').textContent=c.city; cityEl.placeholder=c.placeholder; $('resultsTitle').textContent=c.ideas; $('helper').innerHTML=`<strong>${c.help}</strong> ${c.helptext}`; $('tip').innerHTML=`<strong>${c.tip}</strong> ${c.tiptext}`; updateSaved(); render();}
+    cultureEl.onchange=render; cityEl.oninput=render; $('language').onchange=translate; $('savedButton').onclick=()=>{showSaved=!showSaved; updateSaved(); render();}; renderCats(); renderKidFilters(); translate();
+  </script>
+</body>
+</html>
